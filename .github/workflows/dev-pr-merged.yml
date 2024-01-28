@@ -28,10 +28,9 @@ jobs:
             const linkedIssues = res.repository.pullRequest.closingIssuesReferences.edges.map(
               edge => edge.node.number
             )
-            console.log(linkedIssues)
             
             for (const issueNumber of linkedIssues) {
-              await github.issues.update({
+              await github.rest.issues.update({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issue_number,
