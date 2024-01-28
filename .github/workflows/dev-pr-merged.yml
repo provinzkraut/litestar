@@ -1,0 +1,46 @@
+name: "Develop PR merged"
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - develop
+
+jobs:
+  close_linked_issue:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: | 
+            const prNumber = context.payload.number
+            
+            const query = `query($number: Int!) { repository(owner: "litestar-org", name: "litestar") {
+                pullRequest(number: $number) {
+                      id
+                      closingIssuesReferences (first: 10) { edges { node { number } } }
+                      }
+                  }
+              }`
+            const res = await github.graphql(query, {number: prNumber})
+            const linkedIssues = res.data.repository.pullRequest.closingIssuesReferences.edges.map(
+              edge => edge.node.number
+            )
+            
+            for (const issueNumber of linkedIssues) {
+              await github.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue_number,
+                  state: "closed",
+                  state_reason: "completed"
+              })
+            }
+            
+
+              
+              
+            
+
