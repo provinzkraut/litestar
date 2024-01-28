@@ -25,6 +25,7 @@ jobs:
                   }
               }`
             const res = await github.graphql(query, {number: prNumber, owner: context.repo.owner, name: context.repo.repo})
+            console.log(res)
             const linkedIssues = res.data.repository.pullRequest.closingIssuesReferences.edges.map(
               edge => edge.node.number
             )
