@@ -17,14 +17,14 @@ jobs:
           script: | 
             const prNumber = context.payload.number
             
-            const query = `query($number: Int!) { repository(owner: "litestar-org", name: "litestar") {
+            const query = `query($number: Int!, $owner: String!, $name: !String!) { repository(owner: $owner, name: $name) {
                 pullRequest(number: $number) {
                       id
                       closingIssuesReferences (first: 10) { edges { node { number } } }
                       }
                   }
               }`
-            const res = await github.graphql(query, {number: prNumber})
+            const res = await github.graphql(query, {number: prNumber, owner: context.repo.owner, name: context.repo.repo})
             const linkedIssues = res.data.repository.pullRequest.closingIssuesReferences.edges.map(
               edge => edge.node.number
             )
