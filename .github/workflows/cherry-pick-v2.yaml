@@ -73,6 +73,7 @@ jobs:
           echo "name=$branch_name" >> $GITHUB_OUTPUT
 
       - name: Create Pull Request with GH CLI
+        id: create_pr
         if: steps.branch.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -80,7 +81,7 @@ jobs:
           pr_url=$(gh pr create 
           --base v2 
           --head ${{ steps.branch.outputs.name }} 
-          --title "${{ github.event.pull_request.title }}" 
+          --title "${{ github.event.pull_request.title }} (cherry-picked from #${{ github.event.pull_request.number }})" 
           --body "This PR was automatically created to cherry-pick commit ${{ steps.commit.outputs.sha }} from #${{ github.event.pull_request.number }} into v2."
           )
           echo "pr_url=$pr_url" >> $GITHUB_OUTPUT
