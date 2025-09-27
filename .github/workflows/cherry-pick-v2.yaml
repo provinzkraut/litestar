@@ -86,8 +86,10 @@ jobs:
           echo "pr_url=$pr_url" >> $GITHUB_OUTPUT
 
       - name: Comment on original PR
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          if [ '${{ steps.branch.outcome }}' = 'success']; then
+          if [ "${{ steps.branch.outcome }}" = "success" ]; then
             gh pr comment ${{ github.event.pull_request.number }} --body "A PR has been created to cherry pick these changes into the 'v2' branch: ${{ steps.create_pr.outputs.pr_url }}"
           else
             gh pr comment ${{ github.event.pull_request.number }} --body "⚠️ A PR could not be created to cherry pick these changes into the 'v2' due to conflicts. Cherry-pick must be performed manually."
