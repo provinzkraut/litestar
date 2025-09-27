@@ -82,7 +82,7 @@ jobs:
           --head ${{ steps.branch.outputs.name }} 
           --title "${{ github.event.pull_request.title }}" 
           --body "This PR was automatically created to cherry-pick commit ${{ steps.commit.outputs.sha }} from #${{ github.event.pull_request.number }} into v2."
-          --json url | jq -r .url)
+          )
           echo "pr_url=$pr_url" >> $GITHUB_OUTPUT
 
       - name: Comment on original PR
