@@ -78,6 +78,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           HEAD: ${{ steps.branch.outputs.name }}
+          COMMIT: ${{ steps.commit.outputs.sha }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -87,7 +88,7 @@ jobs:
               title: `${context.payload.pull_request.title} (cherry-picked from #${context.payload.pull_request.number})`,
               head: `${ process.env.HEAD }`,
               base: 'v2',
-              body: `This PR was automatically created to cherry-pick commit ${steps.commit.outputs.sha} from #${context.payload.pull_request.number} into v2.`
+              body: `This PR was automatically created to cherry-pick commit ${ process.env.COMMIT } from #${context.payload.pull_request.number} into v2.`
             });
             core.setOutput("pr_url", pr.data.html_url);
 
