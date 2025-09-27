@@ -76,6 +76,8 @@ jobs:
         id: create_pr
         if: steps.branch.outcome == 'success'
         uses: actions/github-script@v7
+        env:
+          HEAD: ${{ steps.branch.outputs.name }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -83,7 +85,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `${context.payload.pull_request.title} (cherry-picked from #${context.payload.pull_request.number})`,
-              head: `${steps.branch.outputs.name}`,
+              head: `${ process.env.HEAD }`,
               base: 'v2',
               body: `This PR was automatically created to cherry-pick commit ${steps.commit.outputs.sha} from #${context.payload.pull_request.number} into v2.`
             });
