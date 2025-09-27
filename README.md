@@ -7,7 +7,6 @@
 </p>
 <!-- markdownlint-restore -->
 
-
 <div align="center">
 
 <!-- prettier-ignore-start -->
