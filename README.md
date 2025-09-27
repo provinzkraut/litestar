@@ -7,7 +7,6 @@
 </p>
 <!-- markdownlint-restore -->
 
-change
 
 <div align="center">
 
